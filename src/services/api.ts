@@ -15,29 +15,30 @@ class ApiService {
 
   private async request(endpoint: string, options: RequestInit = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
-    
-    const headers = {
+  
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
-
+  
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
-
+  
     const response = await fetch(url, {
       ...options,
       headers,
     });
-
+  
     const data = await response.json();
-
+  
     if (!response.ok) {
       throw new Error(data.error || 'Request failed');
     }
-
+  
     return data;
   }
+  
 
   // Auth methods
   async signup(email: string, password: string, name: string) {
